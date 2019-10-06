@@ -1,19 +1,14 @@
 import json
 import uuid
 import biplist
+import sys
 
-
-def _exit(data):
-    input(data + '\n\nPress ENTER to exit...')
-    exit(0)
-
-
-print('Shared Secret Converter [v1.0] [Coded by @ZenRact]')
-filename = input('[?] Enter a filename: ')
+filename = sys.argv[1]
 try:
     pl_file = biplist.readPlist(filename)
 except biplist.InvalidPlistException:
-    _exit('[!] Can\'t open Steamguard file')
+    print('[!] Can\'t open Steamguard file')
+    exit(0)
 data_array = {}
 for i in range(2, 14):
     data_array[pl_file.get('$objects')[i]] = pl_file.get('$objects')[12+i]
@@ -30,4 +25,5 @@ del data_array['steamguard_scheme'], data_array['steamid']
 result = open(data_array['account_name'] + '.maFile', 'w')
 result.write(json.dumps(data_array))
 result.close()
-_exit('[+] Success: ' + filename + ' => ' + data_array['account_name'] + '.maFile')
+print('[+] Success: ' + filename + ' => ' + data_array['account_name'] + '.maFile')
+exit(0)
